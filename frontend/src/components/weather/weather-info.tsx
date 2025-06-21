@@ -1,7 +1,11 @@
 import { WeatherData } from '@/types/weather';
-import { Cloud, Droplets, Wind, Gauge, Thermometer, Sunrise, Sunset } from 'lucide-react';
+import { Cloud, Droplets, Wind, Gauge, Thermometer, Sunrise, Sunset, FileText } from 'lucide-react';
 
-export function WeatherInfo({ weather_data }: WeatherData) {
+interface WeatherInfoProps extends WeatherData {
+    uuid: string;
+}
+
+export function WeatherInfo({ uuid, date, notes, weather_data }: WeatherInfoProps) {
     const getAirQualityLabel = (index: string) => {
         const labels = {
             '1': 'Good',
@@ -13,7 +17,7 @@ export function WeatherInfo({ weather_data }: WeatherData) {
         };
         return labels[index as keyof typeof labels] || 'Unknown';
     };
-    
+
     const getAirQualityColor = (index: string) => {
         const colors = {
             '1': 'bg-green-500',
@@ -28,12 +32,29 @@ export function WeatherInfo({ weather_data }: WeatherData) {
 
     return (
         <>
+            <div className='rounded-lg bg-gray-700 p-3'>
+                <div className='mb-2 flex items-center gap-2'>
+                    <FileText className='h-4 w-4 text-blue-400' />
+                    <span className='text-sm font-medium text-white'>Request ID: {uuid}</span>
+                    <span className='font-mono text-xs text-blue-300'>{}</span>
+                </div>
+                <div className='text-xs text-gray-400'>
+                    {weather_data.location.name}, {weather_data.location.region} • {date}
+                </div>
+            </div>
+
+            {notes ? (
+                <div className='rounded-lg bg-gray-700 p-3 font-medium'>
+                    Notes: <span className='font-normal'>{notes}</span>
+                </div>
+            ) : null}
+
             <div className='rounded-lg bg-gradient-to-r from-blue-900/30 to-purple-900/30 p-4 text-center'>
                 <div className='mb-3 flex items-center justify-center gap-3'>
                     <Cloud className='h-8 w-8 text-blue-400' />
                     <div>
                         <div className='text-3xl font-light text-white'>
-                            {weather_data.current.temperature}°C
+                            {weather_data.current.temperature}&deg;C
                         </div>
                         <div className='text-sm text-gray-300'>
                             {weather_data.current.weather_descriptions}

@@ -97,7 +97,7 @@ export function WeatherDisplay() {
                     )}
 
                     {result && result.success && result.data ? (
-                        <WeatherInfo {...result.data} />
+                        <WeatherInfo {...{ uuid, ...result.data }} />
                     ) : null}
                 </form>
             </CardContent>
