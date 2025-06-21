@@ -58,7 +58,7 @@ async def create_weather_request(request: WeatherRequest):
             response.raise_for_status()
             weather_data = response.json()
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Failed to fetch weather data")
+        raise HTTPException(status_code=500, detail="Failed to fetch weather data!")
     
     weather_id = str(uuid.uuid4())
 
@@ -78,7 +78,7 @@ async def get_weather_data(weather_id: str):
     This endpoint is already implemented for the assessment.
     """
     if weather_id not in weather_storage:
-        raise HTTPException(status_code=404, detail="Weather data not found")
+        raise HTTPException(status_code=404, detail="Weather data not found!")
     
     return weather_storage[weather_id]
 
