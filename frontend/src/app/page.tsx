@@ -1,4 +1,5 @@
-import { WeatherForm } from '@/components/weather-form';
+import { WeatherDisplay } from '@/components/weather/weather-display';
+import { WeatherForm } from '@/components/weather/weather-form';
 
 export default function Home() {
     return (
@@ -18,23 +19,9 @@ export default function Home() {
                         <WeatherForm />
                     </div>
 
-                    {/* Data Lookup Section Placeholder */}
                     <div className='flex flex-col items-center justify-start'>
                         <h2 className='mb-4 text-2xl font-semibold'>Lookup Weather Data</h2>
-                        <div className='border-muted-foreground/25 rounded-lg border-2 border-dashed p-8'>
-                            <div className='text-muted-foreground'>
-                                <h3 className='mb-2 text-lg font-medium'>
-                                    TODO: Implement Data Lookup
-                                </h3>
-                                <p className='text-sm'>
-                                    This section should allow users to enter an ID and retrieve
-                                    stored weather data.
-                                </p>
-                                <p className='text-muted-foreground/75 mt-2 text-xs'>
-                                    Backend GET /weather/{'{id}'} endpoint is already implemented.
-                                </p>
-                            </div>
-                        </div>
+                        <WeatherDisplay />
                     </div>
                 </div>
             </div>
