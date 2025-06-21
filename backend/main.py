@@ -2,7 +2,18 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Dict, Any, Optional
+from datetime import datetime
+from dotenv import load_dotenv
+
+import uuid
+import httpx
+import os
+
 import uvicorn
+
+load_dotenv()
+
+SECRET_KEY = os.getenv('WEATHER_STACK_API')
 
 app = FastAPI(title="Weather Data System", version="1.0.0")
 
@@ -34,7 +45,31 @@ async def create_weather_request(request: WeatherRequest):
     3. Stores combined data with unique ID in memory
     4. Returns the ID to frontend
     """
-    pass
+    date = request.date
+    location = request.location
+    notes = request.notes
+
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                "http://api.weatherstack.com/current",
+                params={"access_key": SECRET_KEY, "query": location}
+            )
+            response.raise_for_status()
+            weather_data = response.json()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Failed to fetch weather data")
+    
+    weather_id = str(uuid.uuid4())
+
+    weather_storage[weather_id] = {
+        "date": date,
+        "location": location,
+        "notes": notes,
+        "weather_data": weather_data
+    }
+
+    return WeatherResponse(id=weather_id)
 
 @app.get("/weather/{weather_id}")
 async def get_weather_data(weather_id: str):
